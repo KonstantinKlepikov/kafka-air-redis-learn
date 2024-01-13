@@ -2,8 +2,8 @@ name: kafka-air-redis-learn
 services:
   api-kaf:
     build:
-      context: /home/kklepikov/_code_/kafka-air-redis-learn/kaf
-      dockerfile: api.dockerfile
+      context: /home/kklepikov/_code_/kafka-air-redis-learn/api-kaf
+      dockerfile: dockerfile
       args:
         INSTALL_DEV: "true"
     container_name: api-kaf
@@ -27,7 +27,7 @@ services:
       protocol: tcp
     volumes:
     - type: bind
-      source: /home/kklepikov/_code_/kafka-air-redis-learn/kaf/app
+      source: /home/kklepikov/_code_/kafka-air-redis-learn/api-kaf/app
       target: /app
       bind:
         create_host_path: true
@@ -78,6 +78,32 @@ services:
       source: postgres-kaf
       target: /data/postgres
       volume: {}
+  proc-kaf:
+    build:
+      context: /home/kklepikov/_code_/kafka-air-redis-learn/proc-kaf
+      dockerfile: dockerfile
+      args:
+        INSTALL_DEV: "true"
+    container_name: proc-kaf
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka-kaf:9092,OUTSIDE://localhost:9093
+      KAFKA_CREATE_TOPICS: products:1:1
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-kaf:2181
+      POSTGRES_DB: kafka-learn
+      POSTGRES_PASSWORD: greatagain
+      POSTGRES_USER: donaldtrump
+    image: proc-kaf
+    networks:
+      kafka-learn: null
+    volumes:
+    - type: bind
+      source: /home/kklepikov/_code_/kafka-air-redis-learn/proc-kaf/app
+      target: /app
+      bind:
+        create_host_path: true
   zookeeper-kaf:
     container_name: zookeeper-kaf
     environment:
