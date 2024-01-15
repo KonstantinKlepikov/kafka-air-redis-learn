@@ -2,47 +2,58 @@ version: '3.8'
 
 services:
 
-  postgres-kaf:
-
-    image: postgres
-    container_name: postgres-kaf
-    env_file: .kaf.env
-    environment:
-      PGDATA: /data/postgres
-    volumes:
-       - postgres-kaf:/data/postgres
-    ports:
-      - "5432:5432"
-    networks:
-      - kafka-learn
-    restart: unless-stopped
-
   zookeeper-kaf:
 
-    image: wurstmeister/zookeeper
+    image: bitnami/zookeeper
     container_name: zookeeper-kaf
-    env_file: .kaf.env
+    env_file: .env
     ports:
-      - "2181:2181"
+      - "${ZK_PORT}:2181"
+    healthcheck:
+      test: [ "CMD-SHELL", "echo ruok | nc localhost 2181 | grep imok" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
     networks:
       - kafka-learn
 
   kafka-kaf:
 
-    image: wurstmeister/kafka
+    image: bitnami/kafka
     container_name: kafka-kaf
-    env_file: .kaf.env
+    depends_on:
+      - zookeeper-kaf
+    env_file: .env
     ports:
-      - "9092:9092"
+      - "${KAFKA_PORT}:9092"
+    healthcheck:
+      test: [ "CMD-SHELL", "kafka-broker-api-versions --bootstrap-server kafka:9092" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
     networks:
       - kafka-learn
+
+  kafka-ui-kaf:
+
+    container_name: kafka-ui-kaf
+    image: provectuslabs/kafka-ui:latest
+    env_file: .env
+    depends_on:
+      - kafka-kaf
+    ports:
+      - "${KAFKA_UI_PORT}:8080"
+    volumes:
+      - ./kaf/config.yml:/etc/kafkaui/dynamic_config.yaml
 
   api-kaf:
     image: api-kaf
     container_name: api-kaf
     ports:
       - "8392:8000"
-    env_file: .kaf.env
+    env_file: .env
     build:
       args:
         INSTALL_DEV: ${INSTALL_DEV-true}
@@ -56,7 +67,7 @@ services:
   proc-kaf:
     image: proc-kaf
     container_name: proc-kaf
-    env_file: .kaf.env
+    env_file: .env
     build:
       args:
         INSTALL_DEV: ${INSTALL_DEV-true}
@@ -69,6 +80,3 @@ services:
 
 networks:
   kafka-learn:
-
-volumes:
-    postgres-kaf:

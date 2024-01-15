@@ -16,6 +16,7 @@
 6. `make down-kaf` остановка и удаление стека
 7. пересобрать отдельный сервис можно так `docker compose up -d --no-deps --build <service-name>`
 8. [api swagger docs](http://localhost:8392/docs/)
+9. [kafka ui](http://localhost:8480/)
 
 ## Ресурсы
 

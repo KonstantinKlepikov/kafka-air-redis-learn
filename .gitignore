@@ -148,6 +148,7 @@ cython_debug/
 
 # docker stack
 docker-stack.yml
+docker-stack-kaf.yml
 
 # some
 microservice_in_python/
