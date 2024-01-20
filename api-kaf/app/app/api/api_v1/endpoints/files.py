@@ -18,9 +18,9 @@ def on_send_error(excp):
 
 
 @router.post(
-    "/send",
+    "/kafka_python",
     status_code=status.HTTP_200_OK,
-    summary='Sendto kafka data',
+    summary='Send to kafka data. Here we use kafka-python package',
     response_description="Sent to kafka.",
     responses=settings.ERRORS
         )
@@ -28,7 +28,10 @@ def send(user_id: int, user_name: str) -> None:
     """Send to kafka data
     """
     producer = KafkaProducer(
-        bootstrap_servers='kafka-kaf:9092',
+        bootstrap_servers=settings.HOST,
         value_serializer=lambda v: json.dumps(v).encode('utf-8')
             )
-    producer.send('products', {user_id: user_name}).add_callback(on_send_success).add_errback(on_send_error)
+    producer.send(
+        settings.TOPIC,
+        {user_id: user_name},
+        ).add_callback(on_send_success).add_errback(on_send_error)

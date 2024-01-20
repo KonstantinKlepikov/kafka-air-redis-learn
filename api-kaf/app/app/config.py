@@ -10,6 +10,10 @@ ErrorType = dict[int, dict[str, Type[scheme_error.HttpErrorMessage]]]
 
 class Settings(BaseSettings):
 
+    # kafka
+    HOST: str
+    TOPIC: str
+
     # open-api settings
     API_V1: str = "/api/v1"
     title: str = poetry_data['name']
@@ -17,8 +21,8 @@ class Settings(BaseSettings):
     version: str = poetry_data['version']
     openapi_tags: list = [
         {
-            "name": "files",
-            "description": "Files api",
+            "name": "kafka",
+            "description": "Kafka producers",
         },
     ]
 

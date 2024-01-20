@@ -6,5 +6,5 @@ api_router = APIRouter()
 
 
 api_router.include_router(
-    files.router, prefix="", tags=['files', ]
+    files.router, prefix="", tags=['kafka', ]
         )

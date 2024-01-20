@@ -54,6 +54,8 @@ services:
     ports:
       - "8392:8000"
     env_file: .env
+    depends_on:
+      - kafka-kaf
     build:
       args:
         INSTALL_DEV: ${INSTALL_DEV-true}
@@ -68,6 +70,8 @@ services:
     image: proc-kaf
     container_name: proc-kaf
     env_file: .env
+    depends_on:
+      - kafka-kaf
     build:
       args:
         INSTALL_DEV: ${INSTALL_DEV-true}
