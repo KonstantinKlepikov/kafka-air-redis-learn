@@ -19,6 +19,8 @@ bcrypt = "^4.0.1"
 aiohttp = "^3.8.4"
 redis = "^4.3"
 kafka-python = "^2.0.2"
+confluent-kafka = "^2.3.0"
+aiokafka = "^0.10.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=4.6"

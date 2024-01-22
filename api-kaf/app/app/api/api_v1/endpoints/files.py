@@ -24,8 +24,8 @@ def on_send_error(excp):
     response_description="Sent to kafka.",
     responses=settings.ERRORS
         )
-def send(user_id: int, user_name: str) -> None:
-    """Send to kafka data
+def send_kafka_python(user_id: int, user_name: str) -> None:
+    """Send data to kafka data
     """
     producer = KafkaProducer(
         bootstrap_servers=settings.HOST,
@@ -35,3 +35,27 @@ def send(user_id: int, user_name: str) -> None:
         settings.TOPIC,
         {user_id: user_name},
         ).add_callback(on_send_success).add_errback(on_send_error)
+
+
+@router.post(
+    "/confluent_kafka",
+    status_code=status.HTTP_200_OK,
+    summary='Send to kafka data. Here we use confluent-kafka package',
+    response_description="Sent to kafka.",
+    responses=settings.ERRORS
+        )
+def send_confluent_kafka(user_id: int, user_name: str) -> None:
+    """Send data to kafka
+    """
+
+
+@router.post(
+    "/aiokafka",
+    status_code=status.HTTP_200_OK,
+    summary='Send to kafka data. Here we use aiokafka package',
+    response_description="Sent to kafka.",
+    responses=settings.ERRORS
+        )
+def send_aiokafka(user_id: int, user_name: str) -> None:
+    """Send data to kafka
+    """
