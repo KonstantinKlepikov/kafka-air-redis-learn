@@ -16,6 +16,7 @@ def confluent_kafka_consumer(pause: int = 10) -> None:
         'bootstrap.servers': HOST,
         'group.id': GROUP,
         'auto.offset.reset': 'earliest',
+        "api.version.request": True,
         })
     consumer.subscribe([TOPIC, ])
 

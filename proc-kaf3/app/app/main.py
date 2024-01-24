@@ -16,7 +16,8 @@ async def aiokafka_consumer(pause: int = 10) -> None:
     consumer = aiokafka.AIOKafkaConsumer(
         TOPIC,
         group_id=GROUP,
-        bootstrap_servers=[HOST, ],
+        bootstrap_servers=HOST,
+        api_version="3.6.1",
             )
     await consumer.start()
 

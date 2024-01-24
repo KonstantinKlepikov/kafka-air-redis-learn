@@ -9,11 +9,11 @@ services:
     env_file: .env
     ports:
       - "${ZK_PORT}:2181"
-    healthcheck:
-      test: [ "CMD-SHELL", "echo ruok | nc localhost 2181 | grep imok" ]
-      interval: 10s
-      timeout: 10s
-      retries: 5
+    # healthcheck:
+    #   test: [ "CMD-SHELL", "echo ruok | nc localhost 2181 | grep imok" ]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 5
     restart: always
     networks:
       - kafka-learn
@@ -27,11 +27,11 @@ services:
     env_file: .env
     ports:
       - "${KAFKA_PORT}:9092"
-    healthcheck:
-      test: [ "CMD-SHELL", "kafka-broker-api-versions --bootstrap-server kafka:9092" ]
-      interval: 10s
-      timeout: 10s
-      retries: 5
+    # healthcheck:
+    #   test: [ "CMD-SHELL", "kafka-broker-api-versions --bootstrap-server kafka:9092" ]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 5
     restart: always
     networks:
       - kafka-learn
@@ -111,6 +111,22 @@ services:
       dockerfile: dockerfile
     volumes:
       - ./proc-kaf3/app:/app
+    networks:
+      - kafka-learn
+
+  proc-kaf4:
+    image: proc-kaf4
+    container_name: proc-kaf4
+    env_file: .env
+    depends_on:
+      - kafka-kaf
+    build:
+      args:
+        INSTALL_DEV: ${INSTALL_DEV-true}
+      context: ./proc-kaf1
+      dockerfile: dockerfile
+    volumes:
+      - ./proc-kaf1/app:/app
     networks:
       - kafka-learn
 
