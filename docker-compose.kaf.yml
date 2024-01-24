@@ -66,19 +66,51 @@ services:
     networks:
       - kafka-learn
 
-  proc-kaf:
-    image: proc-kaf
-    container_name: proc-kaf
+  proc-kaf1:
+    image: proc-kaf1
+    container_name: proc-kaf1
     env_file: .env
     depends_on:
       - kafka-kaf
     build:
       args:
         INSTALL_DEV: ${INSTALL_DEV-true}
-      context: ./proc-kaf
+      context: ./proc-kaf1
       dockerfile: dockerfile
     volumes:
-      - ./proc-kaf/app:/app
+      - ./proc-kaf1/app:/app
+    networks:
+      - kafka-learn
+
+  proc-kaf2:
+    image: proc-kaf2
+    container_name: proc-kaf2
+    env_file: .env
+    depends_on:
+      - kafka-kaf
+    build:
+      args:
+        INSTALL_DEV: ${INSTALL_DEV-true}
+      context: ./proc-kaf2
+      dockerfile: dockerfile
+    volumes:
+      - ./proc-kaf2/app:/app
+    networks:
+      - kafka-learn
+
+  proc-kaf3:
+    image: proc-kaf3
+    container_name: proc-kaf3
+    env_file: .env
+    depends_on:
+      - kafka-kaf
+    build:
+      args:
+        INSTALL_DEV: ${INSTALL_DEV-true}
+      context: ./proc-kaf3
+      dockerfile: dockerfile
+    volumes:
+      - ./proc-kaf3/app:/app
     networks:
       - kafka-learn
 
